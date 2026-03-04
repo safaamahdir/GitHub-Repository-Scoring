@@ -1,0 +1,31 @@
+[0m11:31:57.303012 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114cf4b50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114d88ed0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114d89410>]}
+
+
+============================== 11:31:57.314184 | b226fca2-4450-45bb-876d-0bc129881f22 ==============================
+[0m11:31:57.314184 [info ] [MainThread]: Running with dbt=1.11.6
+[0m11:31:57.315360 [debug] [MainThread]: running dbt with arguments {'send_anonymous_usage_stats': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/safaa/.dbt', 'empty': 'None', 'indirect_selection': 'eager', 'introspect': 'True', 'use_colors': 'True', 'partial_parse': 'True', 'no_print': 'None', 'log_cache_events': 'False', 'version_check': 'True', 'log_format': 'default', 'debug': 'False', 'log_path': 'logs', 'write_json': 'True', 'printer_width': '80', 'fail_fast': 'False', 'static_parser': 'True', 'target_path': 'None', 'invocation_command': 'dbt init', 'use_experimental_parser': 'False', 'warn_error': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])'}
+[0m11:31:57.357379 [info ] [MainThread]: Creating dbt configuration folder at /Users/safaa/.dbt
+[0m11:33:28.417630 [debug] [MainThread]: Starter project path: /Users/safaa/Documents/9raya/Fise a3/UE G Data Engineering Foundations/ETL pipeline /GitHub-Repository-Scoring/.venv/lib/python3.11/site-packages/dbt/include/starter_project
+[0m11:33:28.455758 [info ] [MainThread]: 
+Your new dbt project "github_analytics" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m11:33:28.457078 [info ] [MainThread]: Setting up your profile.
+[0m11:33:52.938923 [info ] [MainThread]: Profile github_analytics written to /Users/safaa/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m11:33:52.964500 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 115.79072, "process_in_blocks": "0", "process_kernel_time": 0.760376, "process_mem_max_rss": "99467264", "process_out_blocks": "0", "process_user_time": 2.457073}
+[0m11:33:52.966416 [debug] [MainThread]: Command `dbt init` succeeded at 11:33:52.966055 after 115.79 seconds
+[0m11:33:52.967116 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114ce9390>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x114dc95d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x110117f50>]}
+[0m11:33:52.967800 [debug] [MainThread]: Flushing usage events
+[0m11:33:53.568997 [debug] [MainThread]: An error was encountered while trying to flush usage events
