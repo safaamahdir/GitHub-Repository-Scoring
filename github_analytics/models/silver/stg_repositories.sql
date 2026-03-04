@@ -28,7 +28,7 @@ cleaned as (
         coalesce(language, 'Unknown') as language,
 
         --  Compute a derived column repo_age_days (difference between today and created_at).
-        datediff(current_date, cast(created_at as date)) as repo_age_days,
+        datediff('day', cast(created_at as date), current_date) as repo_age_days,
         
     -- Exclude archived repositories (archived = true).
     from source

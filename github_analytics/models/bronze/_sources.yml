@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: bronze
     description: "Raw GitHub data" 
-    schema: main
+    schema: bronze
     tables:
       - name: raw_repositories 
         description: "Repository metadata"
