@@ -2,7 +2,7 @@
 
 /* 1. CTE recent_activity: aggregate metrics from the last 30 days from
 fact_repo_activity (commits, merged PRs, contributors, average close time).
-Also compute total_prs, merged_prs, total_issues, closed_issues over the
+Also compute total_prs_lifetime, total_merged_lifetime, total_issues, closed_issues over the
 full history for community ratios.
 */
 with recent_activity as (
@@ -12,7 +12,7 @@ with recent_activity as (
         sum(case when activity_date >= current_date - interval '30 days' then prs_merged else 0 end) as prs_merged_30d,
         sum(case when activity_date >= current_date - interval '30 days' then unique_committers else 0 end) as unique_committers_30d,
         avg(case when activity_date >= current_date - interval '30 days' then avg_pr_close_hours end) as avg_pr_close_hours_30d,
-        sum(prs_opened) as total_prs_lifetime,
+        sum(prs_opened) as total_prs_lifetime_lifetime,
         sum(prs_merged) as total_merged_lifetime,
         sum(issues_opened) as total_issues_lifetime,
         sum(issues_closed) as total_issues_closed_lifetime
@@ -27,7 +27,7 @@ base_metrics as (
     select
         r.*,
         a.*,
-        coalesce(a.total_merged_lifetime * 1.0 / nullif(a.total_prs_lifetime, 0), 0) as pr_merge_ratio,
+        coalesce(a.total_merged_lifetime * 1.0 / nullif(a.total_prs_lifetime_lifetime, 0), 0) as pr_merge_ratio,
         coalesce(a.total_issues_closed_lifetime * 1.0 / nullif(a.total_issues_lifetime, 0), 0) as issue_resolution_ratio
     from {{ ref('dim_repository') }} r
     inner join recent_activity a on r.repo_id = a.repo_id
@@ -59,7 +59,7 @@ scored as (
 )
 
 /* 5. Final SELECT: compute score_global = weighted average of the 4 sub-scores.
-Add a RANK() OVER (ORDER BY score_global DESC) for ranking. */
+Add a RANK() OVER (ORDER BY score_global DESC) for repo_rank. */
 select
     *,
     (0.25 * score_commits + 0.25 * score_prs + 0.25 * score_contributors + 0.25 * score_reaction_time) as score_global,

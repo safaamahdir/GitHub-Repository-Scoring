@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: dim_repository
+    columns:
+      - name: repo_id
+        tests:
+          - unique
+          - not_null
+
+  - name: scoring_repositories
+    columns:
+      - name: repo_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_repository')
+              field: repo_id
+      - name: score_global
+        tests:
+          - not_null
+      - name: repo_rank
+        tests:
+          - not_null
