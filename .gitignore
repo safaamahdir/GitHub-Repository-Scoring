@@ -2,3 +2,4 @@
 data/
 github_analytics/github_analytics_dev.duckdb
 logs/
+github_analytics/target/
