@@ -13,6 +13,14 @@ cleaned as (
         -- Rename full_name to repo_id (business key).
         full_name as repo_id,
 
+        -- Needed for dim_repository
+        owner_login,
+        license_name,
+        watchers_count,
+        default_branch,
+        has_wiki,
+        has_pages,
+
         -- Cast dates (created_at, updated_at, pushed_at) to TIMESTAMP
         cast(created_at as timestamp) as created_at,
         cast(updated_at as timestamp) as updated_at,
