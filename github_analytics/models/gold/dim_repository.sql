@@ -7,7 +7,7 @@ with repo as (
 select
     -- Identity
     repo_id,
-    repo_name,
+    repo_id as repo_name,
     owner_login,
 
     -- Descriptive attributes
@@ -16,7 +16,7 @@ select
     license_name,
 
     -- Snapshot counters (from GitHub API, not aggregated)
-    stargazers_count    as stars_count,
+    stargazers_count as stars_count,
     forks_count,
     watchers_count,
 
