@@ -11,6 +11,8 @@ cleaned as (
          sha as commit_sha,
          repo_full_name as repo_id,
          
+         committer_login,
+         
          -- Handle null author_login with COALESCE
             coalesce(author_login, 'Unknown') as author_login,
         
