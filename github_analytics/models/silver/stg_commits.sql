@@ -1,6 +1,7 @@
 -- models/silver/stg_commits.sql
 {{ config(
-    materialized='view'
+    materialized='incremental',
+    incremental_strategy='append'
 ) }}
 with source as (
     select * from {{ source('bronze', 'raw_commits') }}
@@ -30,5 +31,9 @@ cleaned as (
 
     from source
     where sha is not null-- Filter rows where sha IS NULL.
+
+    {% if is_incremental() %}
+      and author_date > (select max(author_date) from {{ this }})
+    {% endif %}
 )
 select * from cleaned

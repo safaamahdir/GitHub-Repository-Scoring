@@ -1,5 +1,7 @@
-{{ config( 
-    materialized= 'view'
+{{ config(
+    materialized='incremental',
+    unique_key='issue_number', 
+    incremental_strategy='merge'
 ) }}
 with source as (
     select * from {{ source('bronze', 'raw_issues') }}
@@ -30,6 +32,10 @@ cleaned as (
     -- Filter out pull requests: only keep rows where is_pull_request = false.
     from source
     where is_pull_request = 'false' and issue_number is not null
+
+    {% if is_incremental() %}
+      and updated_at > (select max(updated_at) from {{ this }})
+    {% endif %}
 )
 
 -- IMPORTANT: keep only REAL issues 

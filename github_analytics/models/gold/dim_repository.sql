@@ -7,7 +7,7 @@ with repo as (
 select
     -- Identity
     repo_id,
-    repo_id as repo_id,
+    repo_id as repo_name,
     owner_login,
 
     -- Descriptive attributes

@@ -7,7 +7,7 @@ with source as (
 ),
 
 cleaned as ( 
-    select
+    select 
         -- Repo_id and user_login
         repo_full_name as repo_id,
         coalesce(user_login, 'Unknown') as author_login,
