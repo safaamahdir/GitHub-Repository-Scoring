@@ -1,0 +1,7 @@
+snapshots:
+  - name: snap_repositories
+    config:
+      target_schema: snapshots
+      unique_key: "full_name"       
+      strategy: "timestamp"
+      updated_at: "updated_at"
