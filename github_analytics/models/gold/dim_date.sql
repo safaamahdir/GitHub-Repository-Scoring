@@ -12,7 +12,7 @@ with date_spine as (
 enriched as (
     select
         -- date_id: surrogatekeyinYYYYMMDDformat(integer).
-        to_char(full_date, 'YYYYMMDD')::integer as date_id,
+       strftime(full_date, '%Y%m%d')::integer as date_id,
 
         -- full_date: thecompletedate.
         full_date,
@@ -24,8 +24,8 @@ enriched as (
         extract(day from full_date) as day_of_week,
 
         --day_name,month_name: readablenames(Monday,January).
-        to_char(full_date, 'Day') as day_name,
-        to_char(full_date, 'Month') as month_name,
+        strftime(full_date, '%A') as day_name, 
+        strftime(full_date, '%B') as month_name,
 
         --is_weekend: boolean(dow=0or6).
         case when extract(dow from full_date) in (0,6) then true else false end as is_weekend,

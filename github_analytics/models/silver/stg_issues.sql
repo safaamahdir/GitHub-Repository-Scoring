@@ -7,6 +7,7 @@ with source as (
 
 cleaned as ( 
     select
+        repo_full_name as repo_id,
         --Rename and cast fields (same logic as other models).
         cast(issue_number as integer) as issue_number,
         cast(comments as integer) as comments,

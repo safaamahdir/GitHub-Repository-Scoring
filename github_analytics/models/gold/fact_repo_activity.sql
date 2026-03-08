@@ -4,13 +4,14 @@
 
 --  commits_count, unique_committers (from stg_commits).
 with daily_commits as (
+    select
         repo_id,
-        cast(commit_date as date) as activity_date,
+        cast(committer_date as date) as activity_date,
         count(*) as commits_count,
-        count(distinct committer_id) as unique_committers
+        count(distinct committer_login) as unique_committers
     from {{ ref('stg_commits') }}
-    where commit_date is not null
-    group by repo_id, cast(commit_date as date)
+    where committer_date is not null
+    group by repo_id, cast(committer_date as date)
 ),
 
 -- prs_opened, prs_merged, avg_pr_close_hours (from stg_pull_requests).
@@ -18,25 +19,45 @@ daily_prs as (
     select
         repo_id,
         cast(created_at as date) as activity_date,
-        count(case when status = 'opened' then 1 end) as prs_opened,
-        count(case when status = 'merged' then 1 end) as prs_merged,
-        avg(case when closed_at is not null then datediff(hour, created_at, closed_at) end) as avg_pr_close_hours
+        count(*) as prs_opened,
+        count(case when is_merged = true then 1 end) as prs_merged,
+        avg(case when closed_at is not null then datediff('hour', created_at, closed_at) end) as avg_pr_close_hours
     from {{ ref('stg_pull_requests') }}
     where created_at is not null
     group by repo_id, cast(created_at as date)
 ),
 
 -- issues_opened, issues_closed, avg_issue_close_hours (from stg_issues).
-daily_issues as (
+issues_opened_daily as (
     select
         repo_id,
         cast(created_at as date) as activity_date,
-        count(case when status = 'opened' then 1 end) as issues_opened,
-        count(case when status = 'closed' then 1 end) as issues_closed,
-        avg(case when closed_at is not null then datediff(hour, created_at, closed_at) end) as avg_issue_close_hours
+        count(*) as issues_opened,
+        avg(time_to_close_hours) as avg_issue_close_hours -- Note: cela fera une moyenne par date de création
     from {{ ref('stg_issues') }}
     where created_at is not null
-    group by repo_id, cast(created_at as date)
+    group by 1, 2
+),
+issues_closed_daily as (
+    select
+        repo_id,
+        cast(closed_at as date) as activity_date,
+        count(*) as issues_closed
+    from {{ ref('stg_issues') }}
+    where closed_at is not null
+    group by 1, 2
+),
+
+daily_issues as (
+    select
+        coalesce(o.repo_id, c.repo_id) as repo_id,
+        coalesce(o.activity_date, c.activity_date) as activity_date,
+        coalesce(o.issues_opened, 0) as issues_opened,
+        coalesce(c.issues_closed, 0) as issues_closed,
+        o.avg_issue_close_hours
+    from issues_opened_daily o
+    full outer join issues_closed_daily c 
+        on o.repo_id = c.repo_id and o.activity_date = c.activity_date
 ),
 
 
@@ -52,7 +73,7 @@ select
     ad.repo_id,
     ad.activity_date,
     --   date_id: foreign key to dim_date in YYYYMMDD format.
-    cast(to_char(ad.activity_date, 'YYYYMMDD') as integer) as date_id,
+    cast(strftime(ad.activity_date, '%Y%m%d') as integer) as date_id,
     coalesce(dc.commits_count, 0) as commits_count,
     coalesce(dc.unique_committers, 0) as unique_committers,
     coalesce(dp.prs_opened, 0) as prs_opened,

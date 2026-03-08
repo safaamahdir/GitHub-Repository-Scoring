@@ -14,7 +14,7 @@ cleaned as (
          committer_login,
          
          -- Handle null author_login with COALESCE
-            coalesce(author_login, 'Unknown') as author_login,
+        coalesce(author_login, 'Unknown') as author_login,
         
         -- Cast author_date and committer_date to TIMESTAMP.
         cast(author_date as timestamp) as author_date,
