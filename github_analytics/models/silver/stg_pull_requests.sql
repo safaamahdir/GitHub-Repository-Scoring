@@ -8,6 +8,10 @@ with source as (
 
 cleaned as ( 
     select
+        -- Repo_id and user_login
+        repo_full_name as repo_id,
+        coalesce(user_login, 'Unknown') as author_login,
+
         -- Rename and cast fields (dates to TIMESTAMP, pr_number to INTEGER).
         cast(pr_number as integer) as pr_number,
         cast(created_at as timestamp) as created_at,
